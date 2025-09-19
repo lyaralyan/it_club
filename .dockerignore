@@ -1,0 +1,21 @@
+# Dependency directories
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Next.js build output
+.next
+out
+
+# Git & editor files
+.git
+.gitignore
+Dockerfile
+.dockerignore
+.vscode
+.idea
+*.swp
+
+# OS specific
+.DS_Store
+Thumbs.db
