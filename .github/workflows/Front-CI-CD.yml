@@ -9,8 +9,8 @@ env:
   SERVER_HOST: ${{ secrets.SERVER_HOST }}
   IMAGE_FRONT: lyaralyan/itclub
   IMAGE_FRONT_TAG: ${{ github.sha }}
-  MONGO_HOST: ${{ secrets.MONGO_HOST }}
-  MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+  # MONGO_HOST: ${{ secrets.MONGO_HOST }}
+  # MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 
 jobs:
   CI:
