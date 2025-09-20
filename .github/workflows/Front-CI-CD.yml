@@ -59,7 +59,7 @@ jobs:
             docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
             /home/it-adm/club-dev/docker-confs/image.sh \
           "
-
+###
       # steps:
       #   - name: Git clone
       #     uses: actions/checkout@v3
