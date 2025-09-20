@@ -52,6 +52,7 @@ jobs:
             # Optional debug step to ensure variables are not empty
             echo "Deploying to $SERVER_USER@$SERVER_HOST"
             echo "Image: $IMAGE_FRONT:$IMAGE_FRONT_TAG"
+            echo "$SSH_KEY" | tr -d '\r' > id_rsa
             echo "$SSH_KEY" > id_rsa
             chmod 600 id_rsa
             # Use sshpass with environment variable mode for safety
