@@ -54,7 +54,6 @@ jobs:
       - name: Deploy to prod
 
         run: |
-          echo "Deploying to $SERVER_USER@$SERVER_HOST"
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "\
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD && \
             docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
