@@ -47,13 +47,15 @@ jobs:
             SERVER_HOST: ${{ secrets.SERVER_HOST }}
             DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
             DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+            SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
             # Optional debug step to ensure variables are not empty
             echo "Deploying to $SERVER_USER@$SERVER_HOST"
             echo "Image: $IMAGE_FRONT:$IMAGE_FRONT_TAG"
-            chmod 600 $SERVER_PASSWORD
+            echo "$SSH_KEY" > id_rsa
+            chmod 600 id_rsa
             # Use sshpass with environment variable mode for safety
-            SSHPASS="$SERVER_PASSWORD" sshpass -e ssh \
+            ssh -i id_rsa \
               -o StrictHostKeyChecking=no \
               -p 22 "$SERVER_USER@$SERVER_HOST" "\
                 docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD && \
