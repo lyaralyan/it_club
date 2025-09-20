@@ -40,8 +40,8 @@ jobs:
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      IMAGE_FRONT: ${{ env.IMAGE_FRONT }}
-      IMAGE_FRONT_TAG: ${{ env.IMAGE_FRONT_TAG }}
+    #  IMAGE_FRONT: ${{ env.IMAGE_FRONT }}
+    #  IMAGE_FRONT_TAG: ${{ env.IMAGE_FRONT_TAG }}
       SSH_KEY: ${{ secrets.SSH_KEY }}
     steps:
       - name: Setup SSH key
