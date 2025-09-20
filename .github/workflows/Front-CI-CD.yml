@@ -42,7 +42,9 @@ jobs:
 
       - name: Deploy to prod
         run: |
-          sshpass -p $SERVER_PASSWORD ssh -o StrictHostKeyChecking=no -p 22 $SERVER_USER@$SERVER_HOST "\
+          sshpass -p "$SERVER_PASSWORD" ssh \
+          -o StrictHostKeyChecking=no \
+          -p 22 $SERVER_USER@$SERVER_HOST "\
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD && \
             docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
             /home/it-adm/club-dev/docker-confs/image.sh \
