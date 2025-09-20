@@ -57,8 +57,9 @@ jobs:
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "\
             echo '$DOCKERHUB_PASSWORD' | docker login -u '$DOCKERHUB_USERNAME' --password-stdin && \     
             docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
-            bash -x /home/it-adm/club-prod/docker-confs/hello.sh "
-###s
+            bash -x /home/it-adm/club-prod/docker-confs/hello.sh \
+          "
+###s        
       # steps:
       
       #   - name: Git clone
