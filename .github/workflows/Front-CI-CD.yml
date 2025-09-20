@@ -1,30 +1,32 @@
-name: CI-CD Pipeline
-
+name: CI-CD
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
-      - 'README.md'
-      - 'README.rst'
-
+      - "README.md"
+      - "README.rst"
 env:
+  # SERVER_HOST: ${{ secrets.SERVER_HOST }}
   IMAGE_FRONT: lyaralyan/itclub
-  IMAGE_FRONT_TAG: ${{ github.sha }}   # уникальный тег по коммиту
+  IMAGE_FRONT_TAG: ${{ github.sha }}
+  # MONGO_HOST: ${{ secrets.MONGO_HOST }}
+  # MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 
 jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Git clone
         uses: actions/checkout@v3
 
-      - name: Login to DockerHub
+      - name: Login to Dockerhub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push Docker image
+      # Build and Push container to DockerHub
+      - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
@@ -49,11 +51,23 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
 
-      - name: Deploy to production
+      - name: Deploy to prod
+
         run: |
-          echo "Deploying $IMAGE_FRONT:$IMAGE_FRONT_TAG to $SERVER_USER@$SERVER_HOST"
+          echo "Deploying to $SERVER_USER@$SERVER_HOST"
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "\
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD && \
             docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
             /home/it-adm/club-dev/docker-confs/image.sh \
           "
+
+      # steps:
+      #   - name: Git clone
+      #     uses: actions/checkout@v3
+      #     with:
+      #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #       password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      # - name: Setup SSH connection
+      #   uses: webfactory/ssh-agent@v0.9.0
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_KEY }}
