@@ -44,7 +44,7 @@ jobs:
       - name: Setup SSH connection
         uses: webfactory/ssh-agent@v0.8.1
         with:
-          ssh-private-key: ${{ secret.SSH_KEY }} 
+          ssh-private-key: ${{ secrets.SSH_KEY }} 
       - name: Deploy to prod
         run: |
           ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "\
@@ -74,4 +74,3 @@ jobs:
         #     #     docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
         #     #     /home/it-adm/club-dev/docker-confs/image.sh \
         #     #   "
-# end
