@@ -1,38 +1,35 @@
-name: CI-CD 
-on: 
+name: CI-CD Pipeline
+
+on:
   push:
     branches: [ "main" ]
     paths-ignore:
-    - 'README.md'
-    - 'README.rst'
+      - 'README.md'
+      - 'README.rst'
+
 env:
-  # SERVER_HOST: ${{ secrets.SERVER_HOST }}
   IMAGE_FRONT: lyaralyan/itclub
-  IMAGE_FRONT_TAG: ${{ github.sha }}
-  # MONGO_HOST: ${{ secrets.MONGO_HOST }}
-  # MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+  IMAGE_FRONT_TAG: ${{ github.sha }}   # уникальный тег по коммиту
 
 jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Git clone
+      - name: Checkout repo
         uses: actions/checkout@v3
-     
-      - name: Login to Dockerhub 
+
+      - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-  
-     # Build and Push container to DockerHub
-      - name: Build and push
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: ${{ env.IMAGE_FRONT }}:${{ env.IMAGE_FRONT_TAG }}
-        
+
   CD:
     runs-on: ubuntu-latest
     needs: CI
@@ -52,25 +49,11 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
 
-    
-    # steps:
-    #   - name: Git clone 
-    #     uses: actions/checkout@v3
-    #     with: 
-    #       username: ${{ secrets.DOCKERHUB_USERNAME }}
-    #       password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      # - name: Setup SSH connection
-      #   uses: webfactory/ssh-agent@v0.9.0
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_KEY }}
-          
-      - name: Deploy to prod
-      
+      - name: Deploy to production
         run: |
-          echo "Deploying to $SERVER_USER@$SERVER_HOST"
+          echo "Deploying $IMAGE_FRONT:$IMAGE_FRONT_TAG to $SERVER_USER@$SERVER_HOST"
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "\
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD && \
             docker pull $IMAGE_FRONT:$IMAGE_FRONT_TAG && \
             /home/it-adm/club-dev/docker-confs/image.sh \
-          "      
-      
+          "
